@@ -1,3 +1,8 @@
+# importing  all the
+# functions defined in test.py
+from vectorization import *
+
+
 #729
 out_vectorized_4_delta = vectorized_4_delta(mw, caz, caxs, deltamloop, deltasloop)
 deltamzloop = out_vectorized_4_delta[0]
