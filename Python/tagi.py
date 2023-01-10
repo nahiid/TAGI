@@ -11,12 +11,12 @@ deltamzsloop = out_vectorized_4_delta[2]
 deltaszsloop = out_vectorized_4_delta[3]
 
 #1965
-out_vectorized_mean_var <- vectorized_mean_var(maloop, mw, saloop, sw)
+out_vectorized_mean_var = vectorized_mean_var(maloop, mw, saloop, sw)
 mzloop = out_vectorized_mean_var[0]
 szloop = out_vectorized_mean_var[1]
 
 #2008
-out_vectorized_mean_var <- vectorized_mean_var(ma, mw, Sa, Sw)
+out_vectorized_mean_var = vectorized_mean_var(ma, mw, Sa, Sw)
 mzloop = out_vectorized_mean_var[0]
 szloop = out_vectorized_mean_var[1]
 
