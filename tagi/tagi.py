@@ -14,7 +14,6 @@ def extract_parameters(theta):
         Covariance vector of weights for the current layer
         Mean vector of biases for the current layer
         Covariance vector of biases for the current layer
-
     """
     mw = theta[0, 0]
     sw = theta[1, 0]

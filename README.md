@@ -5,10 +5,11 @@ You can use this command on debian distributions. (For windows refer to related 
 ```
 make install
 ```
-Or you can install `poetry` and run the follwing command.
+Or you can install `poetry` and run the follwing commands.
 
 ```
 poetry lock -n && poetry export --without-hashes > requirements.txt
+poetry install -n
 ```
 ## Test
 For running tests run the following command.
