@@ -1,3 +1,5 @@
+import math
+
 #14
 def activation_func_index(funcname):
     if(funcname == 'tanh'):
@@ -16,12 +18,12 @@ def activation_func_index(funcname):
 def mean_a(z, mz, func_idx):
     if(func_idx == 1):
         def dtanhf(x):
-            print (1-tanh(x)^2)
-        s = dtanhf(mz) * (z-mz) + tanh(mz)
+            print (1-math.tanh(x)^2)
+        s = dtanhf(mz) * (z-mz) + math.tanh(mz)
         j = dtanhf(z)
     elif(func_idx == 2):
         def sigmoid(x):
-            print(1/(1+exp(-x)))
+            print(1/(1+math.exp(-x)))
         def dsigmoid(x):
             print(sigmoid(x)*(1-sigmoid(x)))
         s = sigmoid(mz)
