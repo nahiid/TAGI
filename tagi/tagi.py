@@ -1,19 +1,21 @@
 # importing  all the
 # functions defined in test.py
-from vectorization import *
 import numpy as np
+from vectorization import *
 
-#2929
 
-#Extract parameters
-#Extract parameters from list of parameters.
-#@param theta List of parameters
-#@return - Mean vector of weights for the current layer
-#@return - Covariance vector of weights for the current layer
-#@return - Mean vector of biases for the current layer
-#@return - Covariance vector of biases for the current layer
-#@export
+# 2929
 def extract_parameters(theta):
+    """Extract parameters from list of parameters.
+    Args:
+        theta: List of parameters
+    Returns:
+        Mean vector of weights for the current layer
+        Covariance vector of weights for the current layer
+        Mean vector of biases for the current layer
+        Covariance vector of biases for the current layer
+
+    """
     mw = theta[0, 0]
     sw = theta[1, 0]
     mb = theta[2, 0]
@@ -25,22 +27,24 @@ def extract_parameters(theta):
     outputs = [mw, sw, mb, sb, mwx, swx, mbx, sbx]
     return outputs
 
-#135
 
-#Forward uncertainty propagation for derivative calculation
-#This function feeds the neural network forward from input data to
-#responses and considers components required for derivative calculations.
-#@param NN Lists the structure of the neural network
-#@param theta List of parameters
-#@param states List of states
-#@return - Updated states
-#@return - Mean vectors of activation units' first derivative
-#@return - Covariance matrices of activation units' first derivative
-#@return - Mean vectors of activation units' second derivative
-#@return - Covariance matrices of activation units' second derivative
-#@export
-def feed_forward_pass(nn, theta, satates):
-    #Initialization
+# 135
+def feed_forward_pass(nn, theta, states):
+    """Forward uncertainty propagation for derivative calculation
+    This function feeds the neural network forward from input data to
+    responses and considers components required for derivative calculations.
+    Args:
+        NN: Lists the structure of the neural network
+        theta" List of parameters
+        states" List of states
+    Returns:
+        Updated states
+        Mean vectors of activation units' first derivative
+        Covariance matrices of activation units' first derivative
+        Mean vectors of activation units' second derivative
+        Covariance matrices of activation units' second derivative
+    """
+    # Initialization
     out_extract_parameters = extract_parameters(theta)
     mw = out_extract_parameters[0]
     sw = out_extract_parameters[1]
@@ -70,6 +74,7 @@ def feed_forward_pass(nn, theta, satates):
     mdda = np.empty((num_layers, 1))
     sdda = np.empty((num_layers, 1))
     mda = np.empty((num_layers, 1))
+
 
 # 729
 out_vectorized_4_delta = vectorized_4_delta(mw, caz, caxs, deltamloop, deltasloop)
