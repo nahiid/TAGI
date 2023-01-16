@@ -1,28 +1,25 @@
-def two_plus(m, s, deltam, deltas):
-    m = m + deltam
-    s = s + deltas
-    outputs = [m, s]
+def twoPlus(m, S, deltaM, deltaS):
+    m = m + deltaM
+    S = S + deltaS
+    outputs = [m, S]
     return outputs
 
-
-def vectorized_mean_var(ma, mp, sa, sp):
-    sz = sp * ma * ma + sa * sp + sa * mp * mp
-    mz = ma * mp
-    outputs = [mz, sz]
+def vectorizedMeanVar(ma, mp, Sa, Sp):
+    Sz = Sp*ma*ma + Sa*Sp + Sa*mp*mp
+    mz = ma*mp
+    outputs = [mz, Sz]
     return outputs
 
-
-def vectorized_delta(c, deltam, deltas):
-    deltam = c * deltam
-    deltas = c * deltas * c
-    outputs = [deltam, deltas]
+def vectorizedDelta(C, deltaM, deltaS):
+    deltaM = C*deltaM
+    deltaS = C*deltaS*C
+    outputs = [deltaM, deltaS]
     return outputs
 
-
-def vectorized_4_delta(w, c1, c2, deltam, deltas):
-    deltam1 = w * c1 * deltam
-    deltas1 = w * c1 * deltas * w * c1
-    deltam2 = w * c2 * deltam
-    deltas2 = w * c2 * deltas * w * c2
-    outputs = [deltam1, deltas1, deltam2, deltas2]
+def vectorized4Delta(W, C1, C2, deltaM, deltaS):
+    deltaM1 = W*C1*deltaM
+    deltaS1 = W*C1*deltaS*W*C1
+    deltaM2 = W*C2*deltaM
+    deltaS2 = W*C2*deltaS*W*C2
+    outputs = [deltaM1, deltaS1, deltaM2, deltaS2]
     return outputs
