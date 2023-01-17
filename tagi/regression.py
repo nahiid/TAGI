@@ -13,31 +13,31 @@ This function trains neural network models to solve a regression problem.
 @return - Variance of the predicted responses
 @export"""
 
-def regression(nn, x, y, train_idx, test_idx):
+def regression(NN, x, y, train_idx, test_idx):
     # Initialization
-    initsv = nn[sv]
-    initmax_epoch = nn[max_epoch]
-    nn[error_rate_eval] = 0
+    initsv = NN[sv]
+    initmax_epoch = NN[max_epoch]
+    NN[error_rate_eval] = 0
 
   # Indices for each parameter group
   # Train net
-    nn[train_mode] = 1
-    nn[batch_size] = nn[batch_size_list[1]]
-    nn = initialization_net(nn)
-    nn = parameters(nn)
-    nn = covariance(nn)    
+    NN[train_mode] = 1
+    NN[batchSize] = NN[batch_size_list[1]]
+    NN = initialization_net(NN)
+    NN = parameters(NN)
+    NN = covariance(NN)    
 
     # Validation net
-    nn_val = nn
+    nn_val = NN
     nn_val[train_mode] = 0
-    nn_val[batch_size] = nn[batch_size_list[2]]
+    nn_val[batchSize] = NN[batch_size_list[2]]
     nn_val = parameters(nn_val)
     nn_val = covariance(nn_val)
 
     # Test net
-    nn_test = nn
+    nn_test = NN
     nn_test[train_mode] = 0
-    nn_test[batch_size] = nn[batch_size_list[3]]
+    nn_test[batchSize] = NN[batch_size_list[3]]
     nn_test = parameters(nn_test)
     nn_test = covariance(nn_test)
 
@@ -48,8 +48,8 @@ import time
 #114
 
 # Evaluation
-rmse_list[s] = compute_error(ytest, yntest)
-ll_list[s] = log_lik(ytest, yntest, syntest)
+rmse_list[s] = computeError(ytest, yntest)
+ll_list[s] = loglik(ytest, yntest, syntest)
 t = time.localtime()
 current_time = time.strftime("%H:%M:%S", t)
 new = current_time - old

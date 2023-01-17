@@ -3,7 +3,7 @@ import math
 import statistics
 
 
-def compute_error(y, ypred):
+def computeError(y, ypred):
     """This function calculates the Root Mean Square Error (RMSE). It takes as input
     two vectors (or matrices) with one containing the real \eqn{y}'s and the other the
     predicted \eqn{y}'s from the model.
@@ -17,7 +17,7 @@ def compute_error(y, ypred):
     return e
 
 
-def log_lik(y, ypred, vpred):
+def loglik(y, ypred, Vpred):
     """Compute log-likelihood
     This function calculates the log-likelihood (LL). It takes as input
     three vectors (or matrices) with one containing the real \eqn{y}'s, one with the
@@ -31,7 +31,7 @@ def log_lik(y, ypred, vpred):
     """
     d = len(y)  # unsure
     if d == 1:
-        ll = statistics.mean(
-            (-0.5 * math.log(2 * math.pi * vpred)) - (0.5 * (y - ypred) ^ 2) / vpred
+        LL = statistics.mean(
+            (-0.5 * math.log(2 * math.pi * Vpred)) - (0.5 * (y - ypred) ^ 2) / Vpred
         )
-    return ll
+    return LL
