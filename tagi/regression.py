@@ -13,33 +13,33 @@ This function trains neural network models to solve a regression problem.
 @return - Variance of the predicted responses
 @export"""
 
-def regression(NN, x, y, train_idx, test_idx):
+def regression(NN, x, y, trainIdx, testIdx):
     # Initialization
     initsv = NN[sv]
-    initmax_epoch = NN[max_epoch]
-    NN[error_rate_eval] = 0
+    initmaxEpoch = NN[maxEpoch]
+    NN[errorRateEval] = 0
 
   # Indices for each parameter group
   # Train net
-    NN[train_mode] = 1
-    NN[batchSize] = NN[batch_size_list[1]]
+    NN[trainMode] = 1
+    NN[batchSize] = NN[batchSizeList[1]]
     NN = initialization_net(NN)
     NN = parameters(NN)
     NN = covariance(NN)    
 
     # Validation net
-    nn_val = NN
-    nn_val[train_mode] = 0
-    nn_val[batchSize] = NN[batch_size_list[2]]
-    nn_val = parameters(nn_val)
-    nn_val = covariance(nn_val)
+    NNval = NN
+    NNval[trainMode] = 0
+    NNval[batchSize] = NN[batchSizeList[2]]
+    NNval = parameters(NNval)
+    NNval = covariance(NNval)
 
     # Test net
-    nn_test = NN
-    nn_test[train_mode] = 0
-    nn_test[batchSize] = NN[batch_size_list[3]]
-    nn_test = parameters(nn_test)
-    nn_test = covariance(nn_test)
+    NNtest = NN
+    NNtest[trainMode] = 0
+    NNtest[batchSize] = NN[batchSizeList[3]]
+    NNtest = parameters(NNtest)
+    NNtest = covariance(NNtest)
 
 
 
@@ -48,9 +48,9 @@ import time
 #114
 
 # Evaluation
-rmse_list[s] = computeError(ytest, yntest)
-ll_list[s] = loglik(ytest, yntest, syntest)
+RMSElist[s] = computeError(ytest, ynTest)
+LLlist[s] = loglik(ytest, ynTest, SynTest)
 t = time.localtime()
 current_time = time.strftime("%H:%M:%S", t)
 new = current_time - old
-train_time_list[s] = new
+trainTimelist[s] = new
