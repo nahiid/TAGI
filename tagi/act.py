@@ -65,10 +65,16 @@ def meanA(z, mz, funIdx):
         #relu
         #. numpys maximum() function in Python Equivalent pmax() in R
         s = np.maximum(mz,0)
+        #. len(matrix) : length of rows
+        #. len(matrix[0]) length of the first row to get the no. of columns
+        nrow, ncol = len(z), len(z[0])
+        J = np.zeros((nrow, ncol), dtype=int)
         J[z > 0] = 1
     elif funIdx == 5:
         #softplus
         alpha = 10
+        nrow, ncol = len(mz), len(mz[0])
+        k = np.zeros((nrow, ncol), dtype=int)
         k[alpha * mz < 30] = 1
         s = 1 + math.exp (alpha * mz * k)
         s = (math.log(s) + mz * (1-k)) / alpha
@@ -86,6 +92,40 @@ This function uses lineratization to estimate the covariance matrix of activatio
 def covarianceSa(J, Sz):
     Sa = J * Sz * J
     return(Sa)
+
+"""Mean, Jacobian and variance of activated units
+This function returns mean vector \eqn{\mu_{A}}, Jacobian matrix evaluated at
+\eqn{\mu_{Z}} and covariance matrix of activation units \eqn{\Sigma_{A}}.
+@param z Vector of units for the current layer
+@param mz Mean vector of units for the current layer \eqn{\mu_{Z}}
+@param Sz Covariance matrix of units for the current layer \eqn{\Sigma_{Z}}
+@param funIdx Activation function index defined by \code{\link{activationFunIndex}}
+@return - Mean vector of activation units for the current layer \eqn{\mu_{A}}
+@return - Covariance matrix activation units for the current layer \eqn{\Sigma_{A}}
+@return - Jacobian matrix evaluated at \eqn{\mu_{Z}}
+@export"""
+def meanVar(z, mz, Sz, funIdx):
+  out_meanA = meanA(z, mz, funIdx)
+  m = out_meanA[0]
+  J = out_meanA[1]
+  S = covarianceSa(J, Sz)
+  outputs = list(m, S, J)
+  return(outputs)
+
+"""Mean and variance of activated units for derivatives
+This function calculates mean vector and covariance matrix of activation units'
+derivatives.
+@param mz Mean vector of units for the current layer \eqn{\mu_{Z}}
+@param Sz Covariance matrix of units for the current layer \eqn{\Sigma_{Z}}
+@param funIdx Activation function index defined by \code{\link{activationFunIndex}}
+@param bound If layer is bound
+@return - Mean vector of activation units' first derivative
+@return - Covariance matrix of activation units' first derivative
+@return - Mean vector activation units' second derivative
+@return - Covariance matrix activation units' second derivative
+@export"""
+
+
     
 
 
