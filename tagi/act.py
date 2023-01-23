@@ -124,6 +124,48 @@ derivatives.
 @return - Mean vector activation units' second derivative
 @return - Covariance matrix activation units' second derivative
 @export"""
+def meanVarDev(mz, Sz, funIdx, bound):
+    if funIdx == 1 : 
+        # tanh
+        ma = bound*math.tanh(mz)
+        J = bound*(1 - ma^2)
+        Sa = J*J*Sz
+        # 1st derivative
+        md = bound*(1- ma^2 - Sa)
+        Sd = (bound^2)*(2*Sa*(Sa + 2*(ma^2)))
+        # 2nd derivative
+        Cdd = 4*Sa*ma
+        mdd = -2*md*ma + Cdd
+        Sdd = 4*Sd*Sa + Cdd^2 - 4*Cdd*md*ma + 4*Sd*(ma^2) + 4*Sa*(md^2)
+        
+    elif funIdx == 2 : 
+        # sigmoid
+        def sigmoid(x):
+            1 / (1 + math.exp(-x))
+        ma = sigmoid(mz)
+        J = ma*(1 - ma)
+        Sa = J*J*Sz
+        # 1st derivative
+        md = J - Sa
+        Sd = Sa*(2*Sa + 4*ma^2 - 4*ma + 1)
+        # 2nd derivative
+        Cdd = 4*Sa*ma - 2*Sa
+        mdd = md*(1 - 2*ma) + Cdd
+        Sdd = 4*Sd*Sa + Cdd^2 + 2*Cdd*md*(1 - 2*ma) + Sd*((1 - 2*ma)^2) + 4*Sa*(md^2)
+
+    elif funIdx == 4 :
+        # relu
+        # 1st derivative
+        nrow, ncol = len(mz), len(mz[0])
+        md = np.zeros((nrow, ncol), dtype=int)
+        md[mz > 0] = 1
+        Sd = np.zeros((nrow, ncol), dtype=int)
+        # 2nd derivative
+        mdd = Sd
+        Sdd = Sd
+
+    outputs = np.array(md, Sd, mdd, Sdd)
+    return outputs
 
 
     
