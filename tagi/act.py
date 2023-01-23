@@ -1,3 +1,4 @@
+#Complete
 import math
 from scipy import stats
 from scipy.stats import norm
@@ -137,7 +138,7 @@ def meanVarDev(mz, Sz, funIdx, bound):
         Cdd = 4*Sa*ma
         mdd = -2*md*ma + Cdd
         Sdd = 4*Sd*Sa + Cdd^2 - 4*Cdd*md*ma + 4*Sd*(ma^2) + 4*Sa*(md^2)
-        
+
     elif funIdx == 2 : 
         # sigmoid
         def sigmoid(x):
