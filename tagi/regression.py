@@ -1,3 +1,7 @@
+#. Here
+import numpy as np
+from datetime import datetime
+
 """Regression problem
 This function trains neural network models to solve a regression problem.
 @param NN Lists the structure of the neural network
@@ -14,32 +18,53 @@ This function trains neural network models to solve a regression problem.
 @export"""
 
 def regression(NN, x, y, trainIdx, testIdx):
-    # Initialization
-    initsv = NN[sv]
-    initmaxEpoch = NN[maxEpoch]
-    NN[errorRateEval] = 0
+  # Initialization
+  initsv = NN[sv]
+  initmaxEpoch = NN[maxEpoch]
+  NN[errorRateEval] = 0
 
   # Indices for each parameter group
   # Train net
-    NN[trainMode] = 1
-    NN[batchSize] = NN[batchSizeList[1]]
-    NN = initialization_net(NN)
-    NN = parameters(NN)
-    NN = covariance(NN)    
+  NN[trainMode] = 1
+  NN[batchSize] = NN[batchSizeList[1]]
+  NN = initialization_net(NN)
+  NN = parameters(NN)
+  NN = covariance(NN)    
 
-    # Validation net
-    NNval = NN
-    NNval[trainMode] = 0
-    NNval[batchSize] = NN[batchSizeList[2]]
-    NNval = parameters(NNval)
-    NNval = covariance(NNval)
+  # Validation net
+  NNval = NN
+  NNval[trainMode] = 0
+  NNval[batchSize] = NN[batchSizeList[2]]
+  NNval = parameters(NNval)
+  NNval = covariance(NNval)
 
-    # Test net
-    NNtest = NN
-    NNtest[trainMode] = 0
-    NNtest[batchSize] = NN[batchSizeList[3]]
-    NNtest = parameters(NNtest)
-    NNtest = covariance(NNtest)
+  # Test net
+  NNtest = NN
+  NNtest[trainMode] = 0
+  NNtest[batchSize] = NN[batchSizeList[3]]
+  NNtest = parameters(NNtest)
+  NNtest = covariance(NNtest)
+
+  # Loop
+  Nsplit = NN[numSplits]
+  RMSElist = np.repeat(0, Nsplit)
+  LLlist = np.repeat(0, Nsplit)
+  trainTimelist = np.repeat(0, Nsplit)
+  permuteData = 0
+
+  if trainIdx == None or testIdx == None :
+    permuteData = 1
+
+  for s in range (1, Nsplit):
+    old = datetime.now()
+    if permuteData == 1 :
+      out_split = split(x, y, NN[ratio])
+      xtrain = out_split[0]
+      ytrain = out_split[1]
+      xtest = out_split[2]
+      ytest = out_split[3]
+
+
 
 
 
