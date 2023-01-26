@@ -1,6 +1,8 @@
 #. Here
 import numpy as np
 from datetime import datetime
+from sklearn.model_selection import train_test_split
+from dp import *
 
 """Regression problem
 This function trains neural network models to solve a regression problem.
@@ -63,6 +65,30 @@ def regression(NN, x, y, trainIdx, testIdx):
       ytrain = out_split[1]
       xtest = out_split[2]
       ytest = out_split[3]
+
+    else:
+      xtrain = x[trainIdx[s],]
+      ytrain = np.array(y[trainIdx[s]], ncol=NN[ny])
+      xtest = x[testIdx[s],]
+      ytest = np.array(y[testIdx[s]], ncol=NN[ny])
+
+  # Normalization
+  out_normalize = normalize(xtrain, ytrain, xtest, ytest)
+  xtrain = out_normalize[0]
+  ytrain = out_normalize[1]
+  xtest = out_normalize[2]
+  mytrain = out_normalize[6]
+  sytrain = out_normalize[7]
+
+
+
+
+
+
+
+
+
+
 
 
 
