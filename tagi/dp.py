@@ -1,4 +1,4 @@
-#Completed
+# Completed
 import numpy as np
 
 """Denormalize data
@@ -10,6 +10,8 @@ This function denormalizes response data processed by the neural network.
 @return - Mean of denormalized predicted responses
 @return - Variance of denormalized predicted responses
 @export"""
+
+
 def normalize(xtrain, ytrain, xtest, ytest):
     mxtrain = xtrain.mean(axis=0)
     sxtrain = xtrain.std(axis=0)
@@ -19,8 +21,11 @@ def normalize(xtrain, ytrain, xtest, ytest):
     yntrain = (ytrain - mytrain) / sytrain
     xntest = (xtest - mxtrain) / sxtrain
     yntest = ytest
-    outputs = np.array(xntrain, yntrain, xntest, yntest, mxtrain, sxtrain, mytrain, sytrain)
+    outputs = np.array(
+        xntrain, yntrain, xntest, yntest, mxtrain, sxtrain, mytrain, sytrain
+    )
     return outputs
+
 
 """Split data
 This function splits data into training and test sets.
@@ -32,18 +37,21 @@ This function splits data into training and test sets.
 @return - Testing set of input variables
 @return - Testing set of responses
 @export"""
+
+
 def split(x, y, ratio):
     numObs = x.shape[0]
     idxobs = np.random.permutation(numObs)
     idxTrainEnd = int(ratio * numObs)
     idxTrain = idxobs[:idxTrainEnd]
     idxTest = idxobs[idxTrainEnd:]
-    xtrain = x[idxTrain,:]
-    ytrain = y[idxTrain,:]
-    xtest = x[idxTest,:]
-    ytest = y[idxTest,:]
+    xtrain = x[idxTrain, :]
+    ytrain = y[idxTrain, :]
+    xtest = x[idxTest, :]
+    ytest = y[idxTest, :]
     outputs = np.array(xtrain, ytrain, xtest, ytest)
     return outputs
+
 
 """Denormalize data
 This function denormalizes response data processed by the neural network.
@@ -54,12 +62,13 @@ This function denormalizes response data processed by the neural network.
 @return - Mean of denormalized predicted responses
 @return - Variance of denormalized predicted responses
 @export"""
+
+
 def denormalize(yn, syn, myntrain, syntrain):
     y = yn * syntrain + myntrain
     if syn is not None:
-        sy = syntrain^2 * syn
+        sy = syntrain ^ 2 * syn
     else:
         sy = None
     outputs = np.array(y, sy)
     return outputs
-

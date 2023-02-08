@@ -1,8 +1,9 @@
-#Complete
+# Complete
 import math
+
+import numpy as np
 from scipy import stats
 from scipy.stats import norm
-import numpy as np
 
 """ Assign ID to activation functions
 This function assigns an ID number depending on the type of activation function.
@@ -15,6 +16,7 @@ This function assigns an ID number depending on the type of activation function.
 @return - 4 if \code{funName} is "relu"
 @return - 5 if \code{funName} is "softplus"
 @export """
+
 
 def activationFunIndex(funName):
     if funName == "tanh":
@@ -29,6 +31,7 @@ def activationFunIndex(funName):
         funIdx = 5
     return funIdx
 
+
 """Calculate mean of activated units
 This function uses lineratization to estimate the activation units mean vector
 \eqn{\mu_{A}} and the Jacobian matrix evaluated at \eqn{\mu_{Z}}.
@@ -39,50 +42,58 @@ This function uses lineratization to estimate the activation units mean vector
 matrix evaluated at \eqn{\mu_{Z}}
 @export"""
 
+
 def meanA(z, mz, funIdx):
     if funIdx == 1:
         # tanh
         def dtanhf(x):
             print(1 - math.tanh(x) ^ 2)
+
         s = dtanhf(mz) * (z - mz) + math.tanh(mz)
         J = dtanhf(z)
     elif funIdx == 2:
         # sigmoid
         def sigmoid(x):
             print(1 / (1 + math.exp(-x)))
+
         def dsigmoid(x):
             print(sigmoid(x) * (1 - sigmoid(x)))
+
         s = sigmoid(mz)
         J = dsigmoid(z)
     elif funIdx == 3:
         # cdf
-        #. In r this "stats::pnorm(0)" results "0.5" and in Python  "norm.cdf(0)" results "0.5"
-        #. Therefor norm.cdf in Python is equivalent with pnorm function in R
-        #. In r this "stats::dnorm(0)" results "0.3989" and in Python  "norm.pdf(0)" results "0.3989"
-        #. Therefor norm.pdf in Python is equivalent with dnorm function in R
+        # . In r this "stats::pnorm(0)" results "0.5" and in Python  "norm.cdf(0)" results "0.5"
+        # . Therefor norm.cdf in Python is equivalent with pnorm function in R
+        # . In r this "stats::dnorm(0)" results "0.3989" and in Python  "norm.pdf(0)" results "0.3989"
+        # . Therefor norm.pdf in Python is equivalent with dnorm function in R
         s = norm.pdf(mz) * (z - mz) + norm.cdf(mz)
         J = norm.pdf(z)
     elif funIdx == 4:
-        #relu
-        #. numpys maximum() function in Python Equivalent pmax() in R
-        s = np.maximum(mz,0)
-        #. len(matrix) : length of rows
-        #. len(matrix[0]) length of the first row to get the no. of columns
+        # relu
+        # . numpys maximum() function in Python Equivalent pmax() in R
+        s = np.maximum(mz, 0)
+        # . len(matrix) : length of rows
+        # . len(matrix[0]) length of the first row to get the no. of columns
         nrow, ncol = len(z), len(z[0])
         J = np.zeros((nrow, ncol), dtype=int)
         J[z > 0] = 1
     elif funIdx == 5:
-        #softplus
+        # softplus
         alpha = 10
         nrow, ncol = len(mz), len(mz[0])
         k = np.zeros((nrow, ncol), dtype=int)
         k[alpha * mz < 30] = 1
-        s = 1 + math.exp (alpha * mz * k)
-        s = (math.log(s) + mz * (1-k)) / alpha
-        J = k * math.exp(alpha * mz * k) / (1 + math.exp(alpha * mz * k)) + (1 - k) / alpha
+        s = 1 + math.exp(alpha * mz * k)
+        s = (math.log(s) + mz * (1 - k)) / alpha
+        J = (
+            k * math.exp(alpha * mz * k) / (1 + math.exp(alpha * mz * k))
+            + (1 - k) / alpha
+        )
 
     outputs = np.array(s, J)
-    return(outputs)
+    return outputs
+
 
 """Calculate variance of activated units
 This function uses lineratization to estimate the covariance matrix of activation units \eqn{\Sigma_{A}}.
@@ -90,9 +101,12 @@ This function uses lineratization to estimate the covariance matrix of activatio
 @param Sz Covariance matrix of units for the current layer \eqn{\Sigma_{Z}}
 @return The activation units covariance matrix \eqn{\Sigma_{A}}
 @export"""
+
+
 def covarianceSa(J, Sz):
     Sa = J * Sz * J
-    return(Sa)
+    return Sa
+
 
 """Mean, Jacobian and variance of activated units
 This function returns mean vector \eqn{\mu_{A}}, Jacobian matrix evaluated at
@@ -105,13 +119,16 @@ This function returns mean vector \eqn{\mu_{A}}, Jacobian matrix evaluated at
 @return - Covariance matrix activation units for the current layer \eqn{\Sigma_{A}}
 @return - Jacobian matrix evaluated at \eqn{\mu_{Z}}
 @export"""
+
+
 def meanVar(z, mz, Sz, funIdx):
-  out_meanA = meanA(z, mz, funIdx)
-  m = out_meanA[0]
-  J = out_meanA[1]
-  S = covarianceSa(J, Sz)
-  outputs = list(m, S, J)
-  return(outputs)
+    out_meanA = meanA(z, mz, funIdx)
+    m = out_meanA[0]
+    J = out_meanA[1]
+    S = covarianceSa(J, Sz)
+    outputs = list(m, S, J)
+    return outputs
+
 
 """Mean and variance of activated units for derivatives
 This function calculates mean vector and covariance matrix of activation units'
@@ -125,36 +142,43 @@ derivatives.
 @return - Mean vector activation units' second derivative
 @return - Covariance matrix activation units' second derivative
 @export"""
-def meanVarDev(mz, Sz, funIdx, bound):
-    if funIdx == 1 : 
-        # tanh
-        ma = bound*math.tanh(mz)
-        J = bound*(1 - ma^2)
-        Sa = J*J*Sz
-        # 1st derivative
-        md = bound*(1- ma^2 - Sa)
-        Sd = (bound^2)*(2*Sa*(Sa + 2*(ma^2)))
-        # 2nd derivative
-        Cdd = 4*Sa*ma
-        mdd = -2*md*ma + Cdd
-        Sdd = 4*Sd*Sa + Cdd^2 - 4*Cdd*md*ma + 4*Sd*(ma^2) + 4*Sa*(md^2)
 
-    elif funIdx == 2 : 
+
+def meanVarDev(mz, Sz, funIdx, bound):
+    if funIdx == 1:
+        # tanh
+        ma = bound * math.tanh(mz)
+        J = bound * (1 - ma ^ 2)
+        Sa = J * J * Sz
+        # 1st derivative
+        md = bound * (1 - ma ^ 2 - Sa)
+        Sd = (bound ^ 2) * (2 * Sa * (Sa + 2 * (ma ^ 2)))
+        # 2nd derivative
+        Cdd = 4 * Sa * ma
+        mdd = -2 * md * ma + Cdd
+        Sdd = 4 * Sd * Sa + Cdd ^ 2 - 4 * Cdd * md * ma + 4 * Sd * (ma ^ 2) + 4 * Sa * (
+            md ^ 2
+        )
+
+    elif funIdx == 2:
         # sigmoid
         def sigmoid(x):
             1 / (1 + math.exp(-x))
+
         ma = sigmoid(mz)
-        J = ma*(1 - ma)
-        Sa = J*J*Sz
+        J = ma * (1 - ma)
+        Sa = J * J * Sz
         # 1st derivative
         md = J - Sa
-        Sd = Sa*(2*Sa + 4*ma^2 - 4*ma + 1)
+        Sd = Sa * (2 * Sa + 4 * ma ^ 2 - 4 * ma + 1)
         # 2nd derivative
-        Cdd = 4*Sa*ma - 2*Sa
-        mdd = md*(1 - 2*ma) + Cdd
-        Sdd = 4*Sd*Sa + Cdd^2 + 2*Cdd*md*(1 - 2*ma) + Sd*((1 - 2*ma)^2) + 4*Sa*(md^2)
+        Cdd = 4 * Sa * ma - 2 * Sa
+        mdd = md * (1 - 2 * ma) + Cdd
+        Sdd = 4 * Sd * Sa + Cdd ^ 2 + 2 * Cdd * md * (1 - 2 * ma) + Sd * (
+            (1 - 2 * ma) ^ 2
+        ) + 4 * Sa * (md ^ 2)
 
-    elif funIdx == 4 :
+    elif funIdx == 4:
         # relu
         # 1st derivative
         nrow, ncol = len(mz), len(mz[0])
@@ -167,8 +191,3 @@ def meanVarDev(mz, Sz, funIdx, bound):
 
     outputs = np.array(md, Sd, mdd, Sdd)
     return outputs
-
-
-    
-
-
